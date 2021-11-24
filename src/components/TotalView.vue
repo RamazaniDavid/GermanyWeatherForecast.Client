@@ -1,10 +1,10 @@
 <template>
-  <div class="total-info"></div>
+  <div class="total-view"></div>
 </template>
 
 <script lang="ts">
 export default {
-  name: "TotalInfo",
+  name: "TotalView",
   components: {},
   directives: {},
   props: {
@@ -15,7 +15,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.total-info {
+.total-view {
   background-color: #ffffffec;
 }
 </style>
