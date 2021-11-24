@@ -1,7 +1,7 @@
 <template>
   <div class="city-info">
-    <MDBRow class="">
-      <MDBCol col="6">
+    <div class="">
+      <div col="6">
         <div class="">
           <h1 class="city-title">{{ city.name }}</h1>
           <p class="date-time-info">
@@ -9,59 +9,27 @@
             <strong class="current-time">{{ timestamp }}</strong>
           </p>
         </div>
-      </MDBCol>
-      <MDBCol col="6">
+      </div>
+      <div col="6">
         <div class="p-3">
           <WeatherIcon class="WeatherIcon" />
         </div>
-      </MDBCol>
-      <MDBCol col="6">
+      </div>
+      <div col="6">
         <div class="p-3"></div>
-      </MDBCol>
-      <MDBCol col="6">
+      </div>
+      <div col="6">
         <div class="p-3"></div>
-      </MDBCol>
-    </MDBRow>
-    <MDBRow class="">
-      <MDBCol col="12">
-        <div class="p-3">
-          <MDBTabs v-model="activeTabId3">
-            <!-- Tabs navs -->
-            <MDBTabNav justify tabsClasses="mb-3">
-              <MDBTabItem tabId="ex3-1" href="ex3-1">Link</MDBTabItem>
-              <MDBTabItem tabId="ex3-2" href="ex3-2"
-                >Very very very very long link</MDBTabItem
-              >
-              <MDBTabItem tabId="ex3-3" href="ex3-3">Another link</MDBTabItem>
-            </MDBTabNav>
-            <!-- Tabs navs -->
-            <!-- Tabs content -->
-            <MDBTabContent>
-              <MDBTabPane tabId="ex3-1">Tab 1 content</MDBTabPane>
-              <MDBTabPane tabId="ex3-2">Tab 2 content</MDBTabPane>
-              <MDBTabPane tabId="ex3-3">Tab 3 content</MDBTabPane>
-            </MDBTabContent>
-            <!-- Tabs content -->
-          </MDBTabs>
-        </div>
-      </MDBCol>
-    </MDBRow>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import WeatherIcon from "@/components/WeatherIcon.vue";
-import {
-  MDBTabs,
-  MDBTabNav,
-  MDBTabContent,
-  MDBTabItem,
-  MDBTabPane,
-} from "mdb-vue-ui-kit";
-import { ref } from "vue";
-import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "CityInfo",
   data() {
     return {
@@ -77,16 +45,10 @@ export default {
   },
   components: {
     WeatherIcon,
-    MDBRow,
-    MDBCol,
-    MDBTabs,
-    MDBTabNav,
-    MDBTabContent,
-    MDBTabItem,
-    MDBTabPane,
   },
   directives: {},
   created(): void {
+    debugger;
     this.getNow();
     this.currentDate = this.getCurrentDate();
     setInterval(() => {
@@ -117,10 +79,8 @@ export default {
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     },
   },
-  props: {
-    msg: String,
-  },
-};
+  props: {},
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -153,5 +113,3 @@ export default {
   color: #ffffff;
 }
 </style>
-
-

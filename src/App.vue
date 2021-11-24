@@ -2,17 +2,14 @@
   <router-view />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "App",
   components: {},
-};
+  directives: {},
+  props: {},
+});
 </script>
 
-<style lang="scss">
-@import "~@/../mdb/scss/index.free.scss";
-
-#app {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-}
-</style>
+<style lang="css"></style>
