@@ -58,20 +58,31 @@ import {
   MDBTabItem,
   MDBTabPane,
 } from "mdb-vue-ui-kit";
-import { ref } from "vue";
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
-
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "CityInfo",
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       timestamp: "",
       currentDate: "",
       city: {
         name: "Berlin",
-        temp: 10,
-        min: 2,
-        max: 16,
+        country: "",
+        sunrise: "",
+        sunset: "",
+        temp: "",
+        temp_min: "",
+        temp_max: "",
+        pressure: "",
+        humidity: "",
+        wind_speed: "",
+        wind_deg: "",
+        weather: {
+          description: "",
+          icon: "",
+        },
       },
     };
   },
@@ -97,7 +108,7 @@ export default {
     clearInterval();
   },
   methods: {
-    getCurrentDate() {
+    getCurrentDate(): string {
       return new Date().toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
@@ -120,7 +131,7 @@ export default {
   props: {
     msg: String,
   },
-};
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -153,5 +164,3 @@ export default {
   color: #ffffff;
 }
 </style>
-
-

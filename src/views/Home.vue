@@ -15,13 +15,13 @@ import { Options, Vue } from "vue-class-component";
 import CityInfo from "@/components/CityInfo.vue";
 import TotalView from "@/components/TotalView.vue";
 
-@Options({
-  components: {
-    CityInfo,
-    TotalView,
-  },
-})
-export default class Home extends Vue {}
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "Home",
+  components: { CityInfo },
+  directives: {},
+  props: {},
+});
 </script>
 
 <style lang="scss" scoped>
