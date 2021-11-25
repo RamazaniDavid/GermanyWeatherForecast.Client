@@ -11,9 +11,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import CityInfo from "@/components/CityInfo.vue";
-import TotalView from "@/components/TotalView.vue";
+import CityInfo from "@/components/views/CityInfo.vue";
 
 import { defineComponent } from "vue";
 export default defineComponent({

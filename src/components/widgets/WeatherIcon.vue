@@ -1,6 +1,6 @@
 <template>
   <div class="weather-icon">
-    <img src="../assets/images/animated/overcast-day.svg" alt="" />
+    <img :src="require('@/assets/images/animated/' + icon + '.svg')" alt="" />
   </div>
 </template>
 
@@ -9,8 +9,13 @@ export default {
   name: "WeatherIcon",
   components: {},
   directives: {},
+  methods: {},
   props: {
-    state: String,
+    icon: {
+      type: String,
+      required: false,
+      default: () => "clear-day",
+    },
   },
 };
 </script>

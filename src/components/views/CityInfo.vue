@@ -30,42 +30,39 @@
         <div class="p-3"></div>
       </MDBCol>
     </MDBRow>
-    <MDBRow class="">
+    <MDBRow class="tab-container">
       <MDBCol col="12">
-        <div class="p-3">
-          <MDBTabs v-model="activeTabId">
-            <!-- Tabs navs -->
-            <MDBTabNav tabsClasses="" pills="true">
-              <MDBTabItem tabId="tb_hou" href="tb_hou">Hourly</MDBTabItem>
-              <MDBTabItem tabId="tb_dyl" href="tb_dyl">Daily</MDBTabItem>
-              <MDBTabItem tabId="tb_inf" href="tb_inf">Detail</MDBTabItem>
-            </MDBTabNav>
-            <!-- Tabs navs -->
-            <!-- Tabs content -->
-            <MDBTabContent>
-              <MDBTabPane tabId="tb_hou">Tab 1 content</MDBTabPane>
-              <MDBTabPane tabId="tb_dyl">Tab 2 content</MDBTabPane>
-              <MDBTabPane tabId="tb_inf">Tab 3 content</MDBTabPane>
-            </MDBTabContent>
-            <!-- Tabs content -->
-          </MDBTabs>
-        </div>
+        <AppTab :tabList="tabList">
+          <template v-slot:tabPanel-1>
+            <div class="item-wrapper">
+              <div v-for="item in city.hourly" :key="item" class="hourly-item">
+                <p>
+                  {{ item.time }}
+                </p>
+                <div>
+                  <WeatherIcon class="WeatherIcon-hourly" :icon="item.icon" />
+                </div>
+                <p>
+                  {{ item.temp }}
+                </p>
+              </div>
+            </div>
+          </template>
+          <template v-slot:tabPanel-2> Content 2 </template>
+          <template v-slot:tabPanel-3> Content 3 </template>
+        </AppTab>
       </MDBCol>
     </MDBRow>
   </div>
 </template>
 
 <script lang="ts">
-import WeatherIcon from "@/components/WeatherIcon.vue";
-import {
-  MDBTabs,
-  MDBTabNav,
-  MDBTabContent,
-  MDBTabItem,
-  MDBTabPane,
-} from "mdb-vue-ui-kit";
+import WeatherIcon from "@/components/widgets/WeatherIcon.vue";
+import AppTab from "@/components/containers/tab/AppTab.vue";
+
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "CityInfo",
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -74,8 +71,50 @@ export default defineComponent({
       activeTabId: "tb_hou",
       timestamp: "",
       currentDate: "",
+      tabList: ["Hourly", "Daily", "Detail"],
       city: {
         name: "Berlin",
+        hourly: [
+          {
+            time: "Now",
+            temp: "12",
+            icon: "clear-day",
+          },
+          {
+            time: "2 PM",
+            temp: "13",
+            icon: "dust-day",
+          },
+          {
+            time: "4 PM",
+            temp: "13",
+            icon: "fog-day",
+          },
+          {
+            time: "6 PM",
+            temp: "13",
+            icon: "fog-night",
+          },
+          {
+            time: "8 PM",
+            temp: "13",
+            icon: "overcast-night",
+          },
+          {
+            time: "10 PM",
+            temp: "13",
+            icon: "partly-cloudy-night",
+          },
+        ],
+        dailly: [
+          {
+            date: "",
+            temp: "",
+            temp_max: "",
+            temp_min: "",
+            icon: "",
+          },
+        ],
         country: "",
         sunrise: "",
         sunset: "",
@@ -97,11 +136,7 @@ export default defineComponent({
     WeatherIcon,
     MDBRow,
     MDBCol,
-    MDBTabs,
-    MDBTabNav,
-    MDBTabContent,
-    MDBTabItem,
-    MDBTabPane,
+    AppTab,
   },
   directives: {},
   created(): void {
@@ -160,8 +195,12 @@ export default defineComponent({
   top: -15px;
 }
 
+.WeatherIcon-hourly {
+  width: 60px;
+  height: 60px;
+}
 .city-title {
-  font-size: 8em;
+  font-size: 7em;
   font-weight: bold;
   text-align: left;
   color: #ffffff;
@@ -175,6 +214,13 @@ export default defineComponent({
   line-height: 0.5em;
   position: relative;
   top: 65px;
+}
+
+.tab-container {
+  position: absolute;
+  bottom: 0px;
+  left: 5%;
+  width: 90%;
 }
 
 .temp-info .temp-max-min {
@@ -198,8 +244,21 @@ export default defineComponent({
   color: #ffffff;
 }
 
-.nav-link {
-  text-transform: none !important;
+.hourly-item {
+  color: #ffffff;
+  font-size: 1em;
+  text-align: -webkit-center !important;
+  text-align: center;
+  width: 20%;
+  min-width: 200px;
+  display: inline;
+}
+
+.item-wrapper {
+  display: -webkit-inline-box;
+  overflow: auto;
+  max-width: 100%;
+  width: 100%;
 }
 
 @media (max-width: 540px) {
