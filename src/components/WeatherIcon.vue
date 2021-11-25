@@ -1,6 +1,6 @@
 <template>
   <div class="weather-icon">
-    <img src="../assets/images/animation-ready/overcast-day.svg" alt="" />
+    <img src="../assets/images/animated/overcast-day.svg" alt="" />
   </div>
 </template>
 

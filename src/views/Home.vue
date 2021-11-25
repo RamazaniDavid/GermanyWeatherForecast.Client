@@ -26,7 +26,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .bg-color {
-  background-image: url("../assets/images/bg.webp");
+  background-image: url("../assets/images/backgrounds/cloudy-tunder.webp");
   background-size: cover;
   opacity: 0.3;
   filter: blur(1px);
@@ -37,7 +37,7 @@ export default defineComponent({
 }
 
 .bg-container {
-  background-image: url("../assets/images/bg.webp");
+  background-image: url("../assets/images/backgrounds/cloudy-tunder.webp");
   opacity: 0.6;
   filter: blur(1px);
   -webkit-filter: blur(1px);
