@@ -8,9 +8,7 @@ export default defineComponent({
   name: "TotalView",
   components: {},
   directives: {},
-  props: {
-    msg: String,
-  },
+  props: {},
 });
 </script>
 

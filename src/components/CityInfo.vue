@@ -1,70 +1,32 @@
 <template>
   <div class="city-info">
-    <MDBRow class="">
-      <MDBCol col="12" sm="12" md="6">
-        <h1 class="city-title">{{ city.name }}</h1>
-        <p class="date-time-info">
-          {{ currentDate }}
-          <strong class="current-time">{{ timestamp }}</strong>
-        </p>
-      </MDBCol>
-      <MDBCol col="6" sm="6" md="3">
-        <div class="temp-info">
-          <p class="temp-value">
-            {{ city.temp }} <span class="temp-unit">°</span>
-          </p>
-          <p class="temp-max-min">
-            <span class="temp-max">{{ city.temp_max }}</span>
-            /
-            <span class="temp-min">{{ city.temp_min }}</span>
+    <div class="">
+      <div col="6">
+        <div class="">
+          <h1 class="city-title">{{ city.name }}</h1>
+          <p class="date-time-info">
+            {{ currentDate }}
+            <strong class="current-time">{{ timestamp }}</strong>
           </p>
         </div>
-      </MDBCol>
-      <MDBCol col="6" sm="6" md="3">
-        <WeatherIcon class="WeatherIcon" />
-      </MDBCol>
-      <MDBCol col="6" sm="12">
-        <div class="p-3"></div>
-      </MDBCol>
-      <MDBCol col="6">
-        <div class="p-3"></div>
-      </MDBCol>
-    </MDBRow>
-    <MDBRow class="">
-      <MDBCol col="12">
+      </div>
+      <div col="6">
         <div class="p-3">
-          <MDBTabs v-model="activeTabId">
-            <!-- Tabs navs -->
-            <MDBTabNav tabsClasses="" pills="true">
-              <MDBTabItem tabId="tb_hou" href="tb_hou">Hourly</MDBTabItem>
-              <MDBTabItem tabId="tb_dyl" href="tb_dyl">Daily</MDBTabItem>
-              <MDBTabItem tabId="tb_inf" href="tb_inf">Detail</MDBTabItem>
-            </MDBTabNav>
-            <!-- Tabs navs -->
-            <!-- Tabs content -->
-            <MDBTabContent>
-              <MDBTabPane tabId="tb_hou">Tab 1 content</MDBTabPane>
-              <MDBTabPane tabId="tb_dyl">Tab 2 content</MDBTabPane>
-              <MDBTabPane tabId="tb_inf">Tab 3 content</MDBTabPane>
-            </MDBTabContent>
-            <!-- Tabs content -->
-          </MDBTabs>
+          <WeatherIcon class="WeatherIcon" />
         </div>
-      </MDBCol>
-    </MDBRow>
+      </div>
+      <div col="6">
+        <div class="p-3"></div>
+      </div>
+      <div col="6">
+        <div class="p-3"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import WeatherIcon from "@/components/WeatherIcon.vue";
-import {
-  MDBTabs,
-  MDBTabNav,
-  MDBTabContent,
-  MDBTabItem,
-  MDBTabPane,
-} from "mdb-vue-ui-kit";
-import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "CityInfo",
@@ -95,16 +57,10 @@ export default defineComponent({
   },
   components: {
     WeatherIcon,
-    MDBRow,
-    MDBCol,
-    MDBTabs,
-    MDBTabNav,
-    MDBTabContent,
-    MDBTabItem,
-    MDBTabPane,
   },
   directives: {},
   created(): void {
+    debugger;
     this.getNow();
     this.currentDate = this.getCurrentDate();
     setInterval(() => {
@@ -135,9 +91,7 @@ export default defineComponent({
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     },
   },
-  props: {
-    msg: String,
-  },
+  props: {},
 });
 </script>
 
@@ -196,54 +150,5 @@ export default defineComponent({
   font-size: 2em;
   text-align: left;
   color: #ffffff;
-}
-
-.nav-link {
-  text-transform: none !important;
-}
-
-@media (max-width: 540px) {
-  .city-title {
-    font-size: 3em;
-  }
-
-  .date-time-info {
-    font-size: 10pt;
-  }
-
-  .WeatherIcon {
-    width: 100px;
-    height: 100px;
-  }
-
-  .temp-info {
-    font-size: 3em;
-    line-height: 0.5em;
-    position: relative;
-    top: 25px;
-  }
-
-  .temp-info .temp-max-min {
-    font-size: 10pt;
-    left: 15px;
-    color: #ffffff;
-  }
-}
-@media (min-width: 541px) and (max-width: 1000px) {
-  .city-title {
-    font-size: 3.5em;
-  }
-
-  .date-time-info {
-    font-size: 10pt;
-  }
-
-  .WeatherIcon {
-    width: 150px;
-    height: 150px;
-  }
-  .temp-info {
-    top: 15px;
-  }
 }
 </style>

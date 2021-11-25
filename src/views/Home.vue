@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import CityInfo from "@/components/CityInfo.vue";
 import TotalView from "@/components/TotalView.vue";
 
@@ -24,7 +23,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .bg-color {
   background-image: url("../assets/images/backgrounds/cloudy-tunder.webp");
   background-size: cover;
