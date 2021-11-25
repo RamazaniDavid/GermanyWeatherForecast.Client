@@ -251,7 +251,6 @@ export default defineComponent({
   text-align: center;
   width: 20%;
   min-width: 200px;
-  display: inline;
 }
 
 .item-wrapper {
