@@ -2,19 +2,13 @@
   <div class="city-info">
     <MDBRow class="">
       <MDBCol col="12">
-        <MDBBtn
-          color="primary"
-          aria-controls="exampleModal"
-          @click="showModal = true"
-          >Launch demo modal</MDBBtn
-        >
-        <input
-          class="city-title"
-          type="text"
-          placeholder="Type City Name Here ..."
-          v-model="city.name"
-          @keyup.enter="updateCity"
-        />
+        <p class="city-title pointer" @click="showModal = true">
+          <img
+            class="city-select-img"
+            src="@/assets/images/animated/location.webp"
+          />
+          {{ city.name }}
+        </p>
         <p class="date-time-info">
           {{ currentDate }}
           <strong class="current-time">{{ timestamp }}</strong>
@@ -243,14 +237,23 @@ export default defineComponent({
   font-weight: bold;
   text-align: left;
   color: white;
-  background-color: transparent;
-  border: none;
   border-bottom: solid;
-  width: 85%;
+  width: 35%;
   margin: 0px;
+  margin-left: 50px;
   padding: 0px;
-  height: 90px;
   outline: none;
+  line-height: 1em;
+}
+
+.city-select-img {
+  position: absolute;
+  left: 0px;
+  top: 25px;
+  width: 100px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  cursor: pointer;
 }
 
 .temp-info {
@@ -287,6 +290,7 @@ export default defineComponent({
   font-size: 2em;
   text-align: left;
   color: #ffffff;
+  margin-left: 50px;
 }
 
 .tab-container {
