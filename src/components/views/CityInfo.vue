@@ -2,6 +2,12 @@
   <div class="city-info">
     <MDBRow class="">
       <MDBCol col="12">
+        <MDBBtn
+          color="primary"
+          aria-controls="exampleModal"
+          @click="showModal = true"
+          >Launch demo modal</MDBBtn
+        >
         <input
           class="city-title"
           type="text"
@@ -56,6 +62,28 @@
       </MDBCol>
     </MDBRow>
   </div>
+  <MDBModal
+    id="locationSelectorModal"
+    tabindex="-1"
+    labelledby="exampleModalLabel"
+    size="lg"
+    v-model="showModal"
+  >
+    <MDBModalHeader>
+      <MDBModalTitle id="exampleModalLabel"> Modal title </MDBModalTitle>
+    </MDBModalHeader>
+    <MDBModalBody>
+      <MDBAutoComplete
+        :data="states"
+        label="What is your favorite US state?"
+        v-model="city.name"
+      />
+    </MDBModalBody>
+    <MDBModalFooter>
+      <MDBBtn color="secondary" @click="showModal = false">Close</MDBBtn>
+      <MDBBtn color="primary">Save changes</MDBBtn>
+    </MDBModalFooter>
+  </MDBModal>
 </template>
 
 <script lang="ts">
@@ -65,15 +93,28 @@ import AppTab from "@/components/containers/tab/AppTab.vue";
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent } from "vue";
 
+import {
+  MDBModal,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBBtn,
+  MDBAutoComplete,
+} from "mdb-vue-ui-kit";
+import { ref } from "vue";
+
 export default defineComponent({
   name: "CityInfo",
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
+      showModal: ref(false),
       activeTabId: "tb_hou",
       timestamp: "",
       currentDate: "",
       tabList: ["Hourly", "Daily", "Detail"],
+      states: ["Alabama", "Alaska", "American Samoa", "Arizona"],
       city: {
         name: "Berlin",
         hourly: [
@@ -139,6 +180,13 @@ export default defineComponent({
     MDBRow,
     MDBCol,
     AppTab,
+    MDBModal,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
+    MDBBtn,
+    MDBAutoComplete,
   },
   directives: {},
   created(): void {
