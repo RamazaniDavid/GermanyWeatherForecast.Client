@@ -1,14 +1,20 @@
 <template>
   <div class="city-info">
     <MDBRow class="">
-      <MDBCol col="12" sm="12" md="6">
-        <h1 class="city-title">{{ city.name }}</h1>
+      <MDBCol col="12">
+        <input
+          class="city-title"
+          type="text"
+          placeholder="Type City Name Here ..."
+          v-model="city.name"
+          @keyup.enter="updateCity"
+        />
         <p class="date-time-info">
           {{ currentDate }}
           <strong class="current-time">{{ timestamp }}</strong>
         </p>
       </MDBCol>
-      <MDBCol col="6" sm="6" md="3">
+      <MDBCol col="6" sm="6" md="6">
         <div class="temp-info">
           <p class="temp-value">
             {{ city.temp }} <span class="temp-unit">°</span>
@@ -20,7 +26,7 @@
           </p>
         </div>
       </MDBCol>
-      <MDBCol col="6" sm="6" md="3">
+      <MDBCol col="6" sm="6" md="6">
         <WeatherIcon class="WeatherIcon" />
       </MDBCol>
       <MDBCol col="6" sm="12">
@@ -39,12 +45,8 @@
                 <p>
                   {{ item.time }}
                 </p>
-                <div>
-                  <WeatherIcon class="WeatherIcon-hourly" :icon="item.icon" />
-                </div>
-                <p>
-                  {{ item.temp }}
-                </p>
+                <WeatherIcon class="WeatherIcon-hourly" :icon="item.icon" />
+                <p>{{ item.temp }}°</p>
               </div>
             </div>
           </template>
@@ -188,46 +190,34 @@ export default defineComponent({
   padding: 40px;
 }
 
-.WeatherIcon {
-  width: 200px;
-  height: 200px;
-  position: relative;
-  top: -15px;
-}
-
-.WeatherIcon-hourly {
-  width: 60px;
-  height: 60px;
-}
 .city-title {
-  font-size: 7em;
+  font-size: 5em;
   font-weight: bold;
   text-align: left;
-  color: #ffffff;
+  color: white;
+  background-color: transparent;
+  border: none;
+  border-bottom: solid;
+  width: 85%;
+  margin: 0px;
+  padding: 0px;
+  height: 90px;
+  outline: none;
 }
 
 .temp-info {
-  font-size: 4em;
+  font-size: 8em;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
   color: #ffffff;
   line-height: 0.5em;
   position: relative;
-  top: 65px;
-}
-
-.tab-container {
-  position: absolute;
-  bottom: 0px;
-  left: 5%;
-  width: 90%;
+  top: 100px;
 }
 
 .temp-info .temp-max-min {
-  font-size: 16pt;
+  font-size: 0.3em;
   font-weight: bold;
-  position: relative;
-  left: 20px;
   color: #ffffff;
 }
 
@@ -238,19 +228,40 @@ export default defineComponent({
   color: #e6e6e6;
 }
 
+.WeatherIcon {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  left: calc(50% - 150px);
+}
+
 .date-time-info {
   font-size: 2em;
   text-align: left;
   color: #ffffff;
 }
 
+.tab-container {
+  position: absolute;
+  bottom: 0px;
+  left: 5%;
+  width: 90%;
+  height: 250px;
+}
+
 .hourly-item {
   color: #ffffff;
   font-size: 1em;
-  text-align: -webkit-center !important;
   text-align: center;
   width: 20%;
-  min-width: 200px;
+  min-width: 130px;
+}
+.hourly-item .WeatherIcon-hourly {
+  position: relative;
+  left: calc(50% - 30px);
+
+  width: 60px;
+  height: 60px;
 }
 
 .item-wrapper {
@@ -258,6 +269,10 @@ export default defineComponent({
   overflow: auto;
   max-width: 100%;
   width: 100%;
+
+  scrollbar-color: #0a4c95 #c2d2e4;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 @media (max-width: 540px) {
@@ -303,5 +318,20 @@ export default defineComponent({
   .temp-info {
     top: 15px;
   }
+}
+@media (min-width: 1001px) and (max-width: 1441px) {
+  .city-title {
+    font-size: 3.5em;
+  }
+
+  .WeatherIcon {
+    width: 200px;
+    height: 200px;
+  }
+  .temp-info {
+    top: 35px;
+  }
+}
+@media (min-width: 1442px) {
 }
 </style>

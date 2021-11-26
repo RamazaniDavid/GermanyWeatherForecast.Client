@@ -12,6 +12,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "~@/../mdb/scss/index.free.scss";
+@import "~@/assets/css/app.scss";
 
 #app {
   font-family: Roboto, Helvetica, Arial, sans-serif;

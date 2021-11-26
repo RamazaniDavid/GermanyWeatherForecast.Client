@@ -3,6 +3,7 @@
   <div class="container-overlay">
     <div class="data-box">
       <div class="bg-container"></div>
+      <div class="bg-container-ovr"></div>
       <div class="view-container">
         <CityInfo />
       </div>
@@ -36,14 +37,29 @@ export default defineComponent({
 
 .bg-container {
   background-image: url("../assets/images/backgrounds/cloudy-tunder.webp");
-  opacity: 0.6;
+  opacity: 0.7;
   filter: blur(1px);
   -webkit-filter: blur(1px);
   height: 100%;
   width: 100%;
   background-size: cover;
   border-radius: 20px;
+  position: absolute;
+  z-index: -2;
 }
+
+.bg-container-ovr {
+  opacity: 0.5;
+  background-color: #00000073;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+}
+
 .container-overlay {
   width: 100vw;
   height: 100vh;
