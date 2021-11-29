@@ -1,6 +1,9 @@
 <template>
   <div class="weather-icon">
-    <img :src="require('@/assets/images/animated/' + icon + '.svg')" alt="" />
+    <img
+      :src="require('@/assets/images/weather-icon/' + icon + '.svg')"
+      alt=""
+    />
   </div>
 </template>
 
@@ -14,7 +17,7 @@ export default {
     icon: {
       type: String,
       required: false,
-      default: () => "clear-day",
+      default: () => "01d",
     },
   },
 };

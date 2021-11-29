@@ -11,29 +11,48 @@
         </p>
         <p class="date-time-info">
           {{ currentDate }}
-          <strong class="current-time">{{ timestamp }}</strong>
+          <strong class="current-time"> {{ timestamp }}</strong>
         </p>
+        <div class="system-switch">
+          <img
+            class="system-img-c"
+            :class="{ 'system-img-active': metricSystem === true }"
+            src="@/assets/images/animated/celsius.svg"
+          /><MDBSwitch v-model="metricSystem" class="system-switch-btn" /><img
+            :class="{ 'system-img-active': metricSystem !== true }"
+            class="system-img-f"
+            src="@/assets/images/animated/fahrenheit.svg"
+          />
+        </div>
       </MDBCol>
       <MDBCol col="6" sm="6" md="6">
         <div class="temp-info">
           <p class="temp-value">
-            {{ city.temp }} <span class="temp-unit">°</span>
-          </p>
-          <p class="temp-max-min">
-            <span class="temp-max">{{ city.temp_max }}</span>
-            /
-            <span class="temp-min">{{ city.temp_min }}</span>
+            {{
+              metricSystem === true
+                ? city?.current?.tempMet
+                : city?.current?.tempImp
+            }}
+            <span class="temp-unit">°</span>
+
+            <span class="temp-max-min">
+              <span class="temp-max">{{
+                metricSystem === true
+                  ? city?.current?.maxTempMet
+                  : city?.current?.maxTempImp
+              }}</span>
+              /
+              <span class="temp-min">{{
+                metricSystem === true
+                  ? city?.current?.minTempMet
+                  : city?.current?.minTempImp
+              }}</span>
+            </span>
           </p>
         </div>
       </MDBCol>
       <MDBCol col="6" sm="6" md="6">
-        <WeatherIcon class="WeatherIcon" />
-      </MDBCol>
-      <MDBCol col="6" sm="12">
-        <div class="p-3"></div>
-      </MDBCol>
-      <MDBCol col="6">
-        <div class="p-3"></div>
+        <WeatherIcon class="WeatherIcon" :icon="city?.current?.weatherIcon" />
       </MDBCol>
     </MDBRow>
     <MDBRow class="tab-container">
@@ -41,16 +60,40 @@
         <AppTab :tabList="tabList">
           <template v-slot:tabPanel-1>
             <div class="item-wrapper">
-              <div v-for="item in city.hourly" :key="item" class="hourly-item">
+              <div v-for="item in city.daily" :key="item" class="hourly-item">
                 <p>
-                  {{ item.time }}
+                  {{ item.dayName }}
                 </p>
-                <WeatherIcon class="WeatherIcon-hourly" :icon="item.icon" />
-                <p>{{ item.temp }}°</p>
+                <WeatherIcon
+                  class="WeatherIcon-hourly"
+                  :icon="item.weatherIcon ?? '01d'"
+                />
+                <p>
+                  {{ metricSystem === true ? item.tempMet : item.tempImp }}°
+                </p>
               </div>
             </div>
           </template>
-          <template v-slot:tabPanel-2> Content 2 </template>
+          <template v-slot:tabPanel-2>
+            <div class="item-wrapper">
+              <div
+                v-for="item in city.hourly?.slice(0, 8)"
+                :key="item"
+                class="hourly-item"
+              >
+                <p>
+                  {{ item.time }}
+                </p>
+                <WeatherIcon
+                  class="WeatherIcon-hourly"
+                  :icon="item.weatherIcon"
+                />
+                <p>
+                  {{ metricSystem === true ? item.tempMet : item.tempImp }}°
+                </p>
+              </div>
+            </div></template
+          >
           <template v-slot:tabPanel-3> Content 3 </template>
         </AppTab>
       </MDBCol>
@@ -63,20 +106,9 @@
     size="lg"
     v-model="showModal"
   >
-    <MDBModalHeader>
-      <MDBModalTitle id="exampleModalLabel"> Modal title </MDBModalTitle>
-    </MDBModalHeader>
     <MDBModalBody>
-      <MDBAutoComplete
-        :data="states"
-        label="What is your favorite US state?"
-        v-model="city.name"
-      />
+      <div style="height: 70vh"></div>
     </MDBModalBody>
-    <MDBModalFooter>
-      <MDBBtn color="secondary" @click="showModal = false">Close</MDBBtn>
-      <MDBBtn color="primary">Save changes</MDBBtn>
-    </MDBModalFooter>
   </MDBModal>
 </template>
 
@@ -87,15 +119,9 @@ import AppTab from "@/components/containers/tab/AppTab.vue";
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent } from "vue";
 
-import {
-  MDBModal,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn,
-  MDBAutoComplete,
-} from "mdb-vue-ui-kit";
+import forcast from "@/services/weather.service";
+
+import { MDBModal, MDBModalBody, MDBSwitch } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 
 export default defineComponent({
@@ -104,69 +130,13 @@ export default defineComponent({
   data() {
     return {
       showModal: ref(false),
+      metricSystem: ref(true),
       activeTabId: "tb_hou",
       timestamp: "",
       currentDate: "",
-      tabList: ["Hourly", "Daily", "Detail"],
+      tabList: ["Daily", "Hourly", "Detail"],
       states: ["Alabama", "Alaska", "American Samoa", "Arizona"],
-      city: {
-        name: "Berlin",
-        hourly: [
-          {
-            time: "Now",
-            temp: "12",
-            icon: "clear-day",
-          },
-          {
-            time: "2 PM",
-            temp: "13",
-            icon: "dust-day",
-          },
-          {
-            time: "4 PM",
-            temp: "13",
-            icon: "fog-day",
-          },
-          {
-            time: "6 PM",
-            temp: "13",
-            icon: "fog-night",
-          },
-          {
-            time: "8 PM",
-            temp: "13",
-            icon: "overcast-night",
-          },
-          {
-            time: "10 PM",
-            temp: "13",
-            icon: "partly-cloudy-night",
-          },
-        ],
-        dailly: [
-          {
-            date: "",
-            temp: "",
-            temp_max: "",
-            temp_min: "",
-            icon: "",
-          },
-        ],
-        country: "",
-        sunrise: "",
-        sunset: "",
-        temp: 10,
-        temp_min: 2,
-        temp_max: 16,
-        pressure: "",
-        humidity: "",
-        wind_speed: "",
-        wind_deg: "",
-        weather: {
-          description: "",
-          icon: "",
-        },
-      },
+      city: {},
     };
   },
   components: {
@@ -175,12 +145,8 @@ export default defineComponent({
     MDBCol,
     AppTab,
     MDBModal,
-    MDBModalHeader,
-    MDBModalTitle,
+    MDBSwitch,
     MDBModalBody,
-    MDBModalFooter,
-    MDBBtn,
-    MDBAutoComplete,
   },
   directives: {},
   created(): void {
@@ -192,6 +158,16 @@ export default defineComponent({
   },
   beforeUnmount(): void {
     clearInterval();
+  },
+  mounted(): void {
+    forcast
+      .forcast("stuttgart", "")
+      .then((res) => {
+        this.city = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     getCurrentDate(): string {
@@ -242,6 +218,7 @@ export default defineComponent({
   margin: 0px;
   margin-left: 50px;
   padding: 0px;
+  padding-bottom: 10px;
   outline: none;
   line-height: 1em;
 }
@@ -257,7 +234,7 @@ export default defineComponent({
 }
 
 .temp-info {
-  font-size: 8em;
+  font-size: 7em;
   font-weight: bold;
   text-align: center;
   color: #ffffff;
@@ -270,6 +247,9 @@ export default defineComponent({
   font-size: 0.3em;
   font-weight: bold;
   color: #ffffff;
+
+  left: -25px;
+  position: relative;
 }
 
 .temp-info .temp-max-min .temp-min {
@@ -277,6 +257,42 @@ export default defineComponent({
 }
 .temp-info .temp-max-min .temp-max {
   color: #e6e6e6;
+}
+
+.system-switch {
+  position: absolute;
+  right: 75px;
+  top: 25px;
+  width: 100px;
+  cursor: pointer;
+  display: inline-flex;
+}
+
+.system-switch .form-switch {
+  position: absolute;
+  left: 60px;
+}
+
+.system-img-f {
+  width: 64px;
+  filter: invert(0) sepia(1) saturate(2) hue-rotate(180deg);
+  position: absolute;
+  top: -22px;
+  left: 0px;
+}
+
+.system-img-c {
+  width: 64px;
+  filter: invert(0) sepia(1) saturate(2) hue-rotate(180deg);
+  position: absolute;
+  top: -22px;
+  left: 85px;
+}
+
+.system-img-active {
+  width: 72px;
+  filter: invert(1) sepia(1) saturate(1) hue-rotate(180deg);
+  top: -28px;
 }
 
 .WeatherIcon {
@@ -298,7 +314,7 @@ export default defineComponent({
   bottom: 0px;
   left: 5%;
   width: 90%;
-  height: 250px;
+  height: 180px;
 }
 
 .hourly-item {
@@ -308,6 +324,12 @@ export default defineComponent({
   width: 20%;
   min-width: 130px;
 }
+
+.hourly-item p {
+  margin: 0px;
+  padding: 0px;
+}
+
 .hourly-item .WeatherIcon-hourly {
   position: relative;
   left: calc(50% - 30px);
@@ -329,23 +351,33 @@ export default defineComponent({
 
 @media (max-width: 540px) {
   .city-title {
-    font-size: 3em;
+    font-size: 1.5em;
+    margin-left: 15px;
   }
 
   .date-time-info {
     font-size: 10pt;
+    margin-left: 15px;
   }
 
   .WeatherIcon {
     width: 100px;
     height: 100px;
+    position: absolute;
+    top: 200px;
+    left: calc(50% - 50px);
+  }
+
+  .city-select-img {
+    width: 64px;
   }
 
   .temp-info {
     font-size: 3em;
     line-height: 0.5em;
-    position: relative;
-    top: 25px;
+    position: absolute;
+    top: 140px;
+    left: calc(50% - 50px);
   }
 
   .temp-info .temp-max-min {
@@ -353,7 +385,30 @@ export default defineComponent({
     left: 15px;
     color: #ffffff;
   }
+
+  .tab-container {
+    height: 180px;
+  }
+
+  .system-switch {
+    right: 25px;
+    top: 20px;
+  }
+
+  .system-switch img {
+    width: 48px;
+  }
+
+  .system-img-f {
+    top: -15px;
+    left: 20px;
+  }
+
+  .system-img-c {
+    top: -15px;
+  }
 }
+
 @media (min-width: 541px) and (max-width: 1000px) {
   .city-title {
     font-size: 3.5em;
@@ -379,6 +434,7 @@ export default defineComponent({
   .WeatherIcon {
     width: 200px;
     height: 200px;
+    top: -50px;
   }
   .temp-info {
     top: 35px;

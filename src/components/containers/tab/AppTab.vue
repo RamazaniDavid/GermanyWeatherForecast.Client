@@ -86,6 +86,14 @@ export default defineComponent({
   cursor: pointer;
 }
 .tab-content {
-  padding: 20px;
+  /* padding: 20px; */
+}
+
+@media (max-width: 600px) {
+  .tab-item {
+    padding-right: 1.5em;
+    color: rgb(230, 230, 230);
+    font-size: 12pt;
+  }
 }
 </style>
