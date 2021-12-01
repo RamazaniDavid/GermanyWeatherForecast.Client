@@ -1,20 +1,20 @@
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: white;
+  color: rgb(0, 0, 0);
   opacity: 0.2; /* Firefox */
   font-size: smaller;
 }
 
 :-ms-input-placeholder {
   /* Internet Explorer 10-11 */
-  color: white;
+  color: rgb(0, 0, 0);
   opacity: 0.2;
   font-size: smaller;
 }
 
 ::-ms-input-placeholder {
   /* Microsoft Edge */
-  color: white;
+  color: rgb(0, 0, 0);
   opacity: 0.2;
   font-size: smaller;
 }

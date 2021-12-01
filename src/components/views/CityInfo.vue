@@ -2,7 +2,7 @@
   <div class="city-info">
     <MDBRow class="">
       <MDBCol col="12">
-        <p class="city-title pointer" @click="showModal = true">
+        <p class="city-title pointer" @click="showModalHandler()">
           <img
             class="city-select-img"
             src="@/assets/images/animated/location.webp"
@@ -106,8 +106,12 @@
     v-model="showModal"
   >
     <MDBModalHeader>
-      <MDBModalTitle id="exampleModalLabel">
-        <Input v-model:value="searchExpression" />
+      <MDBModalTitle id="modalTitle" style="width: 80%">
+        <Input
+          v-model:value="searchExpression"
+          placeholder="Search your location by name, or zip code"
+          style="width: 80%"
+        />
       </MDBModalTitle>
     </MDBModalHeader>
     <MDBModalBody>
@@ -191,7 +195,7 @@ export default defineComponent({
       currentDate: string;
       tabList: string[];
       city: any;
-      germanCities: { name: string }[];
+      germanCities: string[];
       suggestedCity: any[];
       recentSearched: Ref<any[]>;
     } = {
@@ -250,9 +254,18 @@ export default defineComponent({
     },
   },
   methods: {
+    showModalHandler() {
+      let viewedCity: { name: string; current: unknown }[] = JSON.parse(
+        localStorage.getItem("viewedCity") ?? "[]"
+      );
+      this.recentSearched = viewedCity;
+      this.showModal = true;
+    },
     fetchCities(): void {
       import("@/core/data/GermanCities.json").then((res) => {
-        this.germanCities = res.cities;
+        this.germanCities = res.cities.map((item) => {
+          return item.trim();
+        });
       });
     },
     searchCity(expr: string): void {
@@ -260,23 +273,24 @@ export default defineComponent({
       if (expr.length < 4) return;
       let filter = this.germanCities
         .filter((city) => {
-          return city.name.toLowerCase().includes(expr.toLowerCase());
+          return city.toLowerCase().includes(expr.toLowerCase());
         })
         .sort((a, b) => {
-          return a.name.toLowerCase() === expr.toLowerCase()
+          return a.toLowerCase() === expr.toLowerCase()
             ? -1
-            : b.name.toLowerCase() === expr.toLowerCase()
+            : b.toLowerCase() === expr.toLowerCase()
             ? 1
-            : a.name.toLowerCase().startsWith(expr.toLowerCase())
+            : a.toLowerCase().startsWith(expr.toLowerCase())
             ? -1
-            : b.name.toLowerCase().startsWith(expr.toLowerCase())
+            : b.toLowerCase().startsWith(expr.toLowerCase())
             ? 1
-            : a.name > b.name
+            : a > b
             ? -1
             : 1;
-        });
+        })
+        .slice(0, 10);
       filter.forEach((ct) => {
-        weatherSrv.currentInfo(ct.name, "").then((res) => {
+        weatherSrv.currentInfo(ct, "").then((res) => {
           this.suggestedCity.push(res);
         });
       });
@@ -294,11 +308,7 @@ export default defineComponent({
       this.searchExpression = "";
       this.suggestedCity = [];
       this.showModal = false;
-      debugger;
-      let viewedCity: { name: string; current: unknown }[] = JSON.parse(
-        localStorage.getItem("viewedCity") ?? "[]"
-      );
-      this.recentSearched = viewedCity;
+      this.recentSearched = [];
     },
     getCurrentDate(): string {
       return new Date().toLocaleDateString("en-US", {

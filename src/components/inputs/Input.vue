@@ -1,5 +1,10 @@
 <template>
-  <input :type="type" :value="internalValue" @input="updateInternalValue" />
+  <input
+    :type="type"
+    :value="internalValue"
+    @input="updateInternalValue"
+    :placeholder="placeholder"
+  />
 </template>
 
 <script>
@@ -7,8 +12,12 @@ import _debounce from "lodash/debounce";
 
 export default {
   props: {
-    value: String,
+    value: {
+      type: String,
+      required: true,
+    },
     type: { type: String, default: "text" },
+    placeholder: String,
   },
   data() {
     return {
