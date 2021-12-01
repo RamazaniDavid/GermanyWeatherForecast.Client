@@ -6,8 +6,7 @@
           <img
             class="city-select-img"
             src="@/assets/images/animated/location.webp"
-          />
-          {{ city.name }}
+          />{{ city.name }}
         </p>
         <p class="date-time-info">
           {{ currentDate }}
@@ -106,8 +105,56 @@
     size="lg"
     v-model="showModal"
   >
+    <MDBModalHeader>
+      <MDBModalTitle id="exampleModalLabel">
+        <Input v-model:value="searchExpression" />
+      </MDBModalTitle>
+    </MDBModalHeader>
     <MDBModalBody>
-      <div style="height: 70vh"></div>
+      <div class="modal-container">
+        <MDBRow class="city-list" v-if="showSearchResult">
+          <MDBCol
+            col="4"
+            sm="4"
+            md="3"
+            lg="2"
+            class="city-item"
+            v-for="(item, index) in suggestedCity"
+            :key="index"
+            @click="fillCity(item.name)"
+          >
+            <WeatherIcon :icon="item.weatherIcon" />
+            <p>
+              {{ item.name }}
+            </p>
+            <p>{{ metricSystem === true ? item.tempMet : item.tempImp }}°</p>
+          </MDBCol>
+        </MDBRow>
+        <MDBRow class="city-list" v-if="showRecentSearched">
+          <MDBCol
+            col="4"
+            sm="4"
+            md="3"
+            lg="2"
+            class="city-item"
+            v-for="(item, index) in recentSearched"
+            :key="index"
+            @click="fillCity(item.name)"
+          >
+            <WeatherIcon :icon="item.current?.weatherIcon" />
+            <p>
+              {{ item.name }}
+            </p>
+            <p>
+              {{
+                metricSystem === true
+                  ? item.current?.tempMet
+                  : item.current?.tempImp
+              }}°
+            </p>
+          </MDBCol>
+        </MDBRow>
+      </div>
     </MDBModalBody>
   </MDBModal>
 </template>
@@ -115,29 +162,60 @@
 <script lang="ts">
 import WeatherIcon from "@/components/widgets/WeatherIcon.vue";
 import AppTab from "@/components/containers/tab/AppTab.vue";
+import Input from "@/components/inputs/Input.vue";
 
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
-import { defineComponent } from "vue";
+import { defineComponent, Ref } from "vue";
 
-import forcast from "@/services/weather.service";
+import weatherSrv from "@/core/services/weather.service";
 
-import { MDBModal, MDBModalBody, MDBSwitch } from "mdb-vue-ui-kit";
+import {
+  MDBModal,
+  MDBModalBody,
+  MDBSwitch,
+  MDBModalTitle,
+  MDBModalHeader,
+} from "mdb-vue-ui-kit";
 import { ref } from "vue";
 
 export default defineComponent({
   name: "CityInfo",
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
-    return {
+    var data: {
+      showModal: Ref<boolean>;
+      metricSystem: Ref<boolean>;
+      searchExpression: Ref<string>;
+      activeTabId: string;
+      timestamp: string;
+      currentDate: string;
+      tabList: string[];
+      city: any;
+      germanCities: { name: string }[];
+      suggestedCity: any[];
+      recentSearched: Ref<any[]>;
+    } = {
       showModal: ref(false),
       metricSystem: ref(true),
+      searchExpression: ref(""),
       activeTabId: "tb_hou",
       timestamp: "",
       currentDate: "",
       tabList: ["Daily", "Hourly", "Detail"],
-      states: ["Alabama", "Alaska", "American Samoa", "Arizona"],
       city: {},
+      germanCities: [],
+      suggestedCity: [],
+      recentSearched: ref([]),
     };
+    return data;
+  },
+  computed: {
+    showSearchResult() {
+      return this.suggestedCity.length > 0;
+    },
+    showRecentSearched() {
+      return this.searchExpression.length < 4;
+    },
   },
   components: {
     WeatherIcon,
@@ -147,6 +225,9 @@ export default defineComponent({
     MDBModal,
     MDBSwitch,
     MDBModalBody,
+    Input,
+    MDBModalTitle,
+    MDBModalHeader,
   },
   directives: {},
   created(): void {
@@ -160,16 +241,65 @@ export default defineComponent({
     clearInterval();
   },
   mounted(): void {
-    forcast
-      .forcast("stuttgart", "")
-      .then((res) => {
-        this.city = res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fillCity("Berlin");
+    this.fetchCities();
+  },
+  watch: {
+    searchExpression(newVal) {
+      this.searchCity(newVal);
+    },
   },
   methods: {
+    fetchCities(): void {
+      import("@/core/data/GermanCities.json").then((res) => {
+        this.germanCities = res.cities;
+      });
+    },
+    searchCity(expr: string): void {
+      this.suggestedCity = [];
+      if (expr.length < 4) return;
+      let filter = this.germanCities
+        .filter((city) => {
+          return city.name.toLowerCase().includes(expr.toLowerCase());
+        })
+        .sort((a, b) => {
+          return a.name.toLowerCase() === expr.toLowerCase()
+            ? -1
+            : b.name.toLowerCase() === expr.toLowerCase()
+            ? 1
+            : a.name.toLowerCase().startsWith(expr.toLowerCase())
+            ? -1
+            : b.name.toLowerCase().startsWith(expr.toLowerCase())
+            ? 1
+            : a.name > b.name
+            ? -1
+            : 1;
+        });
+      filter.forEach((ct) => {
+        weatherSrv.currentInfo(ct.name, "").then((res) => {
+          this.suggestedCity.push(res);
+        });
+      });
+    },
+
+    fillCity(cityName: string): void {
+      weatherSrv
+        .forcast(cityName, "")
+        .then((res) => {
+          this.city = res;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.searchExpression = "";
+      this.suggestedCity = [];
+      this.showModal = false;
+      debugger;
+      let viewedCity: { name: string; current: unknown }[] = JSON.parse(
+        localStorage.getItem("viewedCity") ?? "[]"
+      );
+      this.recentSearched = viewedCity;
+    },
     getCurrentDate(): string {
       return new Date().toLocaleDateString("en-US", {
         weekday: "short",
@@ -208,6 +338,41 @@ export default defineComponent({
   padding: 40px;
 }
 
+.city-item {
+  cursor: pointer;
+  font-size: 8pt;
+  padding: 3px;
+  text-align: center;
+  line-height: 10pt;
+  border: solid 1px gray;
+  border-radius: 10px;
+  margin: 10px;
+  height: 130px;
+  -webkit-box-shadow: 3px 10px 16px 4px rgb(212 212 212 / 52%);
+  box-shadow: 3px 10px 16px 4px rgb(212 212 212 / 52%);
+}
+
+.city-item .weather-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  left: calc(50% - 32px);
+  top: 0px;
+}
+
+.city-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 375px);
+  overflow-y: scroll;
+  padding: 5px;
+}
+
 .city-title {
   font-size: 5em;
   font-weight: bold;
@@ -221,6 +386,8 @@ export default defineComponent({
   padding-bottom: 10px;
   outline: none;
   line-height: 1em;
+
+  inline-size: fit-content;
 }
 
 .city-select-img {
@@ -262,7 +429,7 @@ export default defineComponent({
 .system-switch {
   position: absolute;
   right: 75px;
-  top: 25px;
+  top: 10px;
   width: 100px;
   cursor: pointer;
   display: inline-flex;
@@ -347,6 +514,13 @@ export default defineComponent({
   scrollbar-color: #0a4c95 #c2d2e4;
   scrollbar-width: thin;
   scroll-behavior: smooth;
+}
+
+.modal-container {
+  height: calc(100vh - 350px);
+  padding: 10px;
+  border: solid 1px #343434;
+  border-radius: 10px;
 }
 
 @media (max-width: 540px) {

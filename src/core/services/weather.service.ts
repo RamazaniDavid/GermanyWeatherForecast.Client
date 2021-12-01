@@ -1,12 +1,14 @@
+const BASE_URL = "https://localhost:44393/Weather/";
+
 export default {
-  async forcast(city: string, zipCode: string) {
+  async forcast(city: string, zipCode: string): Promise<any> {
     const requestOptions = {
       method: "get",
       headers: { "Content-Type": "application/json" },
     };
 
     const response = await fetch(
-      `https://localhost:44393/Weather/Forecast?city=${city}&zipCode=${zipCode}`,
+      `${BASE_URL}Forecast?city=${city}&zipCode=${zipCode}`,
       requestOptions
     );
     const data = await handleResponse(response);
@@ -23,6 +25,33 @@ export default {
       viewedCity.push({ name, current });
       localStorage.setItem("viewedCity", JSON.stringify(viewedCity));
     }
+    return data;
+  },
+  async currentInfo(city: string, zipCode: string): Promise<any> {
+    const requestOptions = {
+      method: "get",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const response = await fetch(
+      `${BASE_URL}Current?city=${city}&zipCode=${zipCode}`,
+      requestOptions
+    );
+    const data = await handleResponse(response);
+    return data;
+  },
+  async searchByCityName(cityExpr: string): Promise<[]> {
+    const requestOptions = {
+      method: "get",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const response = await fetch(
+      `${BASE_URL}SearchByCityName?cityExpr=${cityExpr}`,
+      requestOptions
+    );
+    const data = await handleResponse(response);
+
     return data;
   },
 };
