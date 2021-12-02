@@ -58,7 +58,12 @@ export default {
 
 function handleResponse(response: Response) {
   if (!response.ok) {
-    const error = response.statusText;
+    const error =
+      response.statusText?.length > 0
+        ? response.statusText
+        : response.status === 404
+        ? "Not Found"
+        : "";
     return Promise.reject(error);
   }
   return response.text().then((text) => {

@@ -300,9 +300,16 @@ export default defineComponent({
         });
       } else {
         if (expr.length === 5 && !isNaN(parseInt(expr))) {
-          weatherSrv.currentInfo("", expr).then((res) => {
-            this.suggestedCity.push(res);
-          });
+          weatherSrv
+            .currentInfo("", expr)
+            .then((res) => {
+              this.suggestedCity.push(res);
+            })
+            .catch((e) => {
+              console.log(e);
+
+              this.suggestedCity = [];
+            });
         }
       }
     },
