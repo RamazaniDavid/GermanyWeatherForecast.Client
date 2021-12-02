@@ -171,7 +171,8 @@ import Input from "@/components/inputs/Input.vue";
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent, Ref } from "vue";
 
-import weatherSrv from "@/core/services/weather.service";
+import weatherSrv from "@/core/data/services/weather.service";
+import toaster from "@/core/view/services/toast.service";
 
 import {
   MDBModal,
@@ -306,7 +307,10 @@ export default defineComponent({
               this.suggestedCity.push(res);
             })
             .catch((e) => {
-              console.log(e);
+              this.$toast.open({
+                message: e,
+                type: "warning",
+              });
 
               this.suggestedCity = [];
             });
