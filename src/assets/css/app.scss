@@ -1,22 +1,19 @@
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgb(0, 0, 0);
-  opacity: 0.2; /* Firefox */
-  font-size: smaller;
+  opacity: 0.7; /* Firefox */
 }
 
 :-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: rgb(0, 0, 0);
-  opacity: 0.2;
-  font-size: smaller;
+  opacity: 0.7;
 }
 
 ::-ms-input-placeholder {
   /* Microsoft Edge */
   color: rgb(0, 0, 0);
-  opacity: 0.2;
-  font-size: smaller;
+  opacity: 0.7;
 }
 
 /* custom scrollbar */
@@ -44,6 +41,66 @@
   scrollbar-width: thin;
 }
 
+input {
+  border: none;
+  border-bottom: solid 1px #303030;
+}
+
+input:focus {
+  border: none;
+  border-bottom: solid 1px #303030;
+}
+
 .pointer {
   cursor: pointer;
+}
+
+.w-90-p {
+  width: 90%;
+}
+
+.w-100-p {
+  width: 100%;
+}
+
+@media (max-width: 559px) {
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-size: 9pt;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-size: 9pt;
+  }
+
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    font-size: 9pt;
+  }
+
+  input::-webkit-input-placeholder {
+    font-size: 9pt;
+  }
+}
+
+@media (min-width: 560px) {
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-size: 12pt;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-size: 12pt;
+  }
+
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    font-size: 12pt;
+  }
+
+  input::-webkit-input-placeholder {
+    font-size: 12pt;
+  }
 }

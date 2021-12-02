@@ -106,11 +106,11 @@
     v-model="showModal"
   >
     <MDBModalHeader>
-      <MDBModalTitle id="modalTitle" style="width: 80%">
+      <MDBModalTitle id="modalTitle" class="w-100-p">
         <Input
           v-model:value="searchExpression"
           placeholder="Search your location by name, or zip code"
-          style="width: 80%"
+          class="w-100-p"
         />
       </MDBModalTitle>
     </MDBModalHeader>
@@ -258,7 +258,10 @@ export default defineComponent({
       let viewedCity: { name: string; current: unknown }[] = JSON.parse(
         localStorage.getItem("viewedCity") ?? "[]"
       );
-      this.recentSearched = viewedCity;
+
+      this.searchExpression = "";
+      this.suggestedCity = [];
+      this.recentSearched = viewedCity.reverse();
       this.showModal = true;
     },
     fetchCities(): void {
@@ -271,29 +274,37 @@ export default defineComponent({
     searchCity(expr: string): void {
       this.suggestedCity = [];
       if (expr.length < 4) return;
-      let filter = this.germanCities
-        .filter((city) => {
-          return city.toLowerCase().includes(expr.toLowerCase());
-        })
-        .sort((a, b) => {
-          return a.toLowerCase() === expr.toLowerCase()
-            ? -1
-            : b.toLowerCase() === expr.toLowerCase()
-            ? 1
-            : a.toLowerCase().startsWith(expr.toLowerCase())
-            ? -1
-            : b.toLowerCase().startsWith(expr.toLowerCase())
-            ? 1
-            : a > b
-            ? -1
-            : 1;
-        })
-        .slice(0, 10);
-      filter.forEach((ct) => {
-        weatherSrv.currentInfo(ct, "").then((res) => {
-          this.suggestedCity.push(res);
+      if (isNaN(parseInt(expr.substring(0, 1)))) {
+        let filter = this.germanCities
+          .filter((city) => {
+            return city.toLowerCase().includes(expr.toLowerCase());
+          })
+          .sort((a, b) => {
+            return a.toLowerCase() === expr.toLowerCase()
+              ? -1
+              : b.toLowerCase() === expr.toLowerCase()
+              ? 1
+              : a.toLowerCase().startsWith(expr.toLowerCase())
+              ? -1
+              : b.toLowerCase().startsWith(expr.toLowerCase())
+              ? 1
+              : a > b
+              ? -1
+              : 1;
+          })
+          .slice(0, 10);
+        filter.forEach((ct) => {
+          weatherSrv.currentInfo(ct, "").then((res) => {
+            this.suggestedCity.push(res);
+          });
         });
-      });
+      } else {
+        if (expr.length === 5 && !isNaN(parseInt(expr))) {
+          weatherSrv.currentInfo("", expr).then((res) => {
+            this.suggestedCity.push(res);
+          });
+        }
+      }
     },
 
     fillCity(cityName: string): void {
@@ -305,8 +316,6 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
         });
-      this.searchExpression = "";
-      this.suggestedCity = [];
       this.showModal = false;
       this.recentSearched = [];
     },
