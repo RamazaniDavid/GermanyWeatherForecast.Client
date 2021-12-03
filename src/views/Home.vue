@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import CityInfo from "@/components/views/CityInfo.vue";
+import CityInfo from "@/components/views/cityInfo/CityInfo.vue";
 
 import { defineComponent } from "vue";
 export default defineComponent({

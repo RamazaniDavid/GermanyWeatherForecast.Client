@@ -4,6 +4,7 @@ import router from "./router";
 import VueToast from "vue-toast-notification";
 // Import one of the available themes
 //import 'vue-toast-notification/dist/theme-default.css';
+import "@/core/common/array-extends.js";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 const app = createApp(App);

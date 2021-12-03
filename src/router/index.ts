@@ -7,6 +7,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "Home",
     component: Home,
   },
+  { path: "/:pathMatch(.*)*", name: "NotFound", redirect: "/" },
 ];
 
 const router = createRouter({
