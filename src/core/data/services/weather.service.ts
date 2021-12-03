@@ -1,7 +1,7 @@
 const BASE_URL = process.env.VUE_APP_API_URL;
 
 export default {
-  async forcast(city: string, zipCode: string): Promise<any> {
+  async forecast(city: string, zipCode: string): Promise<any> {
     const requestOptions = {
       method: "get",
       headers: { "Content-Type": "application/json" },

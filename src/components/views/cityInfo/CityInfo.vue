@@ -299,7 +299,8 @@ export default defineComponent({
       return this.suggestedCity.length > 0;
     },
     showRecentSearched() {
-      return this.searchExpression.length < 4;
+      // In Germany there are cities with 2 chars, so we need to start filter with 2 chars
+      return this.searchExpression.length < 2;
     },
   },
   components: {
@@ -350,11 +351,13 @@ export default defineComponent({
         this.germanCities = res.cities.map((item) => {
           return item.trim();
         });
+        console.log(this.germanCities);
       });
     },
     searchCity(expr: string): void {
       this.suggestedCity = [];
-      if (expr.length < 4) return;
+      // In Germany there are cities with 2 chars, so we need to start filter with 2 chars
+      if (expr.length < 2) return;
       if (isNaN(parseInt(expr.substring(0, 1)))) {
         let filter = this.germanCities
           .filter((city) => {
@@ -400,7 +403,7 @@ export default defineComponent({
 
     fillCity(cityName: string): void {
       weatherSrv
-        .forcast(cityName, "")
+        .forecast(cityName, "")
         .then((res) => {
           this.city = res;
         })
