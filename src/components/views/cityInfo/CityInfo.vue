@@ -351,7 +351,6 @@ export default defineComponent({
         this.germanCities = res.cities.map((item) => {
           return item.trim();
         });
-        console.log(this.germanCities);
       });
     },
     searchCity(expr: string): void {
@@ -408,7 +407,10 @@ export default defineComponent({
           this.city = res;
         })
         .catch((err) => {
-          console.log(err);
+          this.$toast.open({
+            message: err,
+            type: "error",
+          });
         });
       this.showModal = false;
       this.recentSearched = [];
