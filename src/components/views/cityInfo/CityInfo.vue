@@ -251,7 +251,6 @@ import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent, Ref } from "vue";
 
 import weatherSrv from "@/core/data/services/weather.service";
-import toaster from "@/core/view/services/toast.service";
 
 import {
   MDBModal,
