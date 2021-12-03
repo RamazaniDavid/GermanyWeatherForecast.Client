@@ -124,7 +124,8 @@
 
 .item-wrapper {
   display: -webkit-inline-box;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   max-width: 100%;
   width: 100%;
 
