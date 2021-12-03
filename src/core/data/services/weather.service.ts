@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:44393/Weather/";
+const BASE_URL = process.env.VUE_APP_API_URL;
 
 export default {
   async forcast(city: string, zipCode: string): Promise<any> {

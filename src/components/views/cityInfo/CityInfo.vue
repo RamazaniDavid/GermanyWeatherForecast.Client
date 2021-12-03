@@ -247,6 +247,8 @@ import WeatherIcon from "@/components/widgets/WeatherIcon.vue";
 import AppTab from "@/components/containers/tab/AppTab.vue";
 import Input from "@/components/inputs/Input.vue";
 
+import Vue from "vue";
+
 import { MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import { defineComponent, Ref } from "vue";
 
