@@ -216,7 +216,7 @@
         <MDBRow class="city-list" v-if="showRecentSearched">
           <MDBCol
             col="12"
-            sm="6"
+            sm="12"
             md="4"
             lg="2"
             class="city-item"

@@ -1,3 +1,9 @@
+@media (max-width: 501px) {
+  .city-item {
+    width: 90%;
+  }
+}
+
 @media (max-width: 991px) {
   .city-info {
     padding: 20px;
@@ -8,6 +14,9 @@
 
   .date-time-info {
     font-size: 1rem;
+  }
+  .city-item {
+    margin: 5px;
   }
 
   .WeatherIcon {
@@ -105,5 +114,35 @@
 }
 
 @media (min-width: 992px) {
-    
+  @media (max-height: 799px) {
+    .city-info {
+      padding: 20px;
+    }
+    .city-title {
+      font-size: 3em;
+    }
+
+    .date-time-info {
+      font-size: 1rem;
+    }
+
+    .WeatherIcon {
+      width: 250px;
+      height: 250px;
+      left: calc(50% - 125px);
+      top: -70px;
+    }
+
+    .detail-info {
+      font-size: 5em;
+      line-height: 0.5em;
+      top: 45px;
+    }
+
+    .detail-info .details {
+      font-size: 10pt;
+      left: 105px;
+      top: -70px;
+    }
+  }
 }
